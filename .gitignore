@@ -1,0 +1,21 @@
+# Arquivos pessoais
+secrets.h
+
+# Arduino
+*.bin
+*.elf
+*.map
+
+# Diretórios de build
+build/
+dist/
+
+# VS Code
+.vscode/
+
+# CLion
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
