@@ -21,9 +21,23 @@ O projeto reproduz estações de rádio pela internet e possui uma interface gr�
 * Controle de volume por gesto horizontal
 * Interface sem LVGL
 
+# ESP32 Web Radio
+
+## Tela principal
+
+![Main](images/interface.png)
+
+## Lista de estações
+
+![Stations](images/station_list.png)
+
+## Controle de volume
+
+![Volume](images/volume.png)
+
 ## Hardware utilizado
 
-* ESP32 com display touch 480×320
+* ESP32s3 com display touch 480×320 - WT32_Plus  
 * Controlador de display ST7796U
 * Saída de áudio I2S
 * DAC ou amplificador I2S compatível
