@@ -42,6 +42,8 @@ O projeto reproduz estações de rádio pela internet e possui uma interface gr�
 * Saída de áudio I2S
 * DAC ou amplificador I2S compatível
 
+https://pt.aliexpress.com/item/1005006198835803.html
+
 ### Pinos I2S
 
 ```cpp
@@ -174,6 +176,10 @@ Faça um movimento horizontal:
 * para a esquerda: diminui o volume.
 
 O volume utiliza a faixa de `0` a `21` da biblioteca ESP32-audioI2S.
+
+### Play e stop
+
+Precione uma vez no centro da tela para stop e outra vez para play
 
 ## Metadata
 

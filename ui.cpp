@@ -45,6 +45,8 @@ static void openVolumePanel();
 static void closeVolumePanel();
 static void updateVolumeFromMovement(int16_t deltaX);
 
+static bool isPlayTouchArea(int16_t x, int16_t y);
+
 // --------------------------------------------------
 // CONTROLE DE ATUALIZAÇÃO
 // --------------------------------------------------
@@ -85,12 +87,17 @@ static constexpr int16_t LIST_HEIGHT = 260;
 static constexpr int16_t STATION_ITEM_HEIGHT = 48;
 
 static constexpr int16_t OPEN_SWIPE_DISTANCE = 45;
-static constexpr int16_t TOUCH_MOVE_THRESHOLD = 8;
+static constexpr int16_t TOUCH_MOVE_THRESHOLD = 12;
 
 static constexpr uint16_t COLOR_LIST_BACKGROUND = TFT_BLUE;
 static constexpr uint32_t COLOR_LIST_ITEM = TFT_DARKCYAN;
 static constexpr uint16_t COLOR_LIST_SELECTED = TFT_MIDNIGHTBLUE;
 static constexpr uint16_t COLOR_LIST_BORDER = TFT_CYAN;
+
+static constexpr int16_t PLAY_TOUCH_X = 100;
+static constexpr int16_t PLAY_TOUCH_Y = 80;
+static constexpr int16_t PLAY_TOUCH_WIDTH = 280;
+static constexpr int16_t PLAY_TOUCH_HEIGHT = 190;
 
 // --------------------------------------------------
 // ESTADO DA ROLAGEM
@@ -787,9 +794,7 @@ void uiHandleTouch() {
     // Gesto iniciado no lado esquerdo e movido
     // horizontalmente para a direita.
     // ------------------------------------------------
-
-    // Abre o volume com movimento horizontal
-    // para a direita ou para a esquerda
+    
     if (
       abs(totalMovementX) > VOLUME_OPEN_DISTANCE && abs(totalMovementX) > abs(totalMovementY)) {
       openVolumePanel();
@@ -858,6 +863,15 @@ void uiHandleTouch() {
       if (!touchMoved) {
         selectStationFromTouch(touchStartY);
       }
+
+      touchMoved = false;
+      return;
+    }
+
+    if (!touchMoved && isPlayTouchArea(touchStartX, touchStartY)) {
+
+      Serial.println("[Touch] Play/Stop");
+      audioPlayerToggle();
 
       touchMoved = false;
       return;
@@ -1184,4 +1198,8 @@ static void closeVolumePanel() {
   drawCodecBitrate();
   drawMetadata();
   updateMetadataScroll();
+}
+
+static bool isPlayTouchArea(int16_t x, int16_t y) {
+  return (x >= 100 && x <= 380 && y >= 80 && y <= 270);
 }

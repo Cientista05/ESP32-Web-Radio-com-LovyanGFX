@@ -23,4 +23,7 @@ void audioPlayerSelectStation(size_t index);
 size_t audioPlayerGetStationIndex();
 const char* audioPlayerGetStationName();
 
+void audioPlayerToggle();
+bool audioPlayerIsPlaying();
+
 #endif

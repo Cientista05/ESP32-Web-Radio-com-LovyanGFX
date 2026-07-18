@@ -33,9 +33,9 @@ void setup() {
   audioPlayerBegin();
   audioPlayerStart();
 
-  Serial.println();
-Serial.printf("Heap livre : %u bytes\n", ESP.getFreeHeap());
-Serial.printf("PSRAM livre: %u bytes\n", ESP.getFreePsram());
+  //Serial.println();
+  //Serial.printf("Heap livre : %u bytes\n", ESP.getFreeHeap());
+  //Serial.printf("PSRAM livre: %u bytes\n", ESP.getFreePsram());
 }
 
 void loop() {

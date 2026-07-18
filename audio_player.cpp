@@ -24,15 +24,48 @@ static volatile size_t requestedStationIndex = 0;
 
 static size_t currentStationIndex = 0;
 
+static volatile bool playing = true;
+static volatile bool toggleRequested = false;
+
 // --------------------------------------------------
 // FUNÇÕES INTERNAS
 // --------------------------------------------------
 
 static void audioTask(void* parameter) {
-  audio.connecttohost(
+  bool connected = audio.connecttohost(
     stations[currentStationIndex].url);
 
+  playing = connected;
+
   for (;;) {
+    // -----------------------------------------------
+    // PLAY / STOP
+    // -----------------------------------------------
+    if (toggleRequested) {
+      toggleRequested = false;
+
+      if (playing) {
+        Serial.println("[Audio] STOP");
+
+        audio.stopSong();
+        playing = false;
+      } else {
+        Serial.println("[Audio] PLAY");
+
+        bool reconnected = audio.connecttohost(
+          stations[currentStationIndex].url);
+
+        playing = reconnected;
+
+        Serial.printf(
+          "[Audio] Reconexao: %s\n",
+          reconnected ? "OK" : "FALHOU");
+      }
+    }
+
+    // -----------------------------------------------
+    // TROCA DE ESTAÇÃO
+    // -----------------------------------------------
     if (stationChangeRequested) {
       size_t newIndex;
 
@@ -57,29 +90,32 @@ static void audioTask(void* parameter) {
 
         strlcpy(
           currentMetadata.title,
-          "Conectando...",
+          "Aguardando informacoes...",
           sizeof(currentMetadata.title));
 
-        strlcpy(
-          currentMetadata.codec,
-          "",
-          sizeof(currentMetadata.codec));
-
-        strlcpy(
-          currentMetadata.bitrate,
-          "",
-          sizeof(currentMetadata.bitrate));
+        currentMetadata.codec[0] = '\0';
+        currentMetadata.bitrate[0] = '\0';
 
         metadataChanged = true;
 
         portEXIT_CRITICAL(&metadataMux);
 
-        audio.connecttohost(
+        bool stationConnected = audio.connecttohost(
           stations[currentStationIndex].url);
+
+        playing = stationConnected;
+
+        Serial.printf(
+          "[Audio] Estacao selecionada: %s - %s\n",
+          stations[currentStationIndex].name,
+          stationConnected ? "OK" : "FALHOU");
       }
     }
 
-    audio.loop();
+    if (playing) {
+      audio.loop();
+    }
+
     vTaskDelay(1);
   }
 }
@@ -185,7 +221,7 @@ void audio_showstreamtitle(const char* info) {
     artist = raw.substring(0, separator);
     title = raw.substring(separator + 3);
   } else {
-    artist = RADIO_NAME;
+    artist = stations[currentStationIndex].name;
     title = raw;
   }
 
@@ -193,7 +229,7 @@ void audio_showstreamtitle(const char* info) {
   title.trim();
 
   if (artist.length() == 0) {
-    artist = RADIO_NAME;
+    artist = stations[currentStationIndex].name;
   }
 
   if (title.length() == 0) {
@@ -312,4 +348,12 @@ size_t audioPlayerGetStationIndex() {
 
 const char* audioPlayerGetStationName() {
   return stations[currentStationIndex].name;
+}
+
+void audioPlayerToggle() {
+  toggleRequested = true;
+}
+
+bool audioPlayerIsPlaying() {
+  return playing;
 }
