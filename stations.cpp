@@ -34,7 +34,7 @@ const RadioStation stations[] = {
   { 11,
     "KEXP Seattle",
     "http://kexp.streamguys1.com/kexp160.aac" },
-  { 10,
+  { 12,
     "Radio Swiss Jazz",
     "http://stream.srg-ssr.ch/srgssr/rsj/mp3/128" }
 };
