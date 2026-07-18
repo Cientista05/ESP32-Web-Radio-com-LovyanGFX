@@ -9,8 +9,8 @@
 // WI-FI
 // --------------------------------------------------
 
-constexpr const char* WIFI_SSID = "ALHN-31DA";
-constexpr const char* WIFI_PASSWORD = "4242450201";
+constexpr const char* WIFI_SSID = "xxxxxxxxxx";
+constexpr const char* WIFI_PASSWORD = "xxxxxxxxxxxx";
 
 // --------------------------------------------------
 // ESTAÇÃO
